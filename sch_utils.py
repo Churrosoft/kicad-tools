@@ -1,6 +1,5 @@
 import re
 
-
 def findComponentsLines(_file):
     comp = []
     myFile = _file
@@ -22,18 +21,19 @@ def getComponent(_file, index):
     return data
 
 
-def extracValue(_comp, index, grp=0):
-    part = re.findall(r'\".*?\"', _comp[index][1])
-    print(part)
-    return part[grp]
+def extracValues(_comp, index=1):
+    part = re.findall(r'\"(.*?)\"', _comp[index])
+    return part
 
 
 def GetLCSC(_comp):
     for el in _comp:
-        print(extracValue(el, 1, 1))
-        """ LCSC = (extracValue(el, 1, 1)+[(-1, "no value")])[0]
-        if (LCSC[0] != -1):
-            print("Found component with LCSC code, skipping")
-        else:
-            print("Search") """
+        row = extracValues(el)
+        if(len(row) > 1):
+            if(row[1] == "LCSC"):
+                return row[1]
+    return 0
+
+def GetPackage(component):
+    #TODO: laburar
     pass
