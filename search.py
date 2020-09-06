@@ -2,7 +2,7 @@ import re
 from sch_utils import extracValues
 from scraper import buscar_componente
 from terminaltables import AsciiTable
-from term_utils import get_int,clear
+from term_utils import get_int, clear
 
 
 def BR():
@@ -11,11 +11,11 @@ def BR():
 
 def SelectLCSC(lcsc_list):
     temp = 0
-    table_data = [['Option', 'LCSC', 'Value', 'Price', 'Type'], ]
+    table_data = [['Option', 'Package', 'LCSC', 'Value', 'Price', 'Type'], ]
     table = AsciiTable(table_data)
     print("lista de codigos compatibles:")
     for el in lcsc_list:
-        table_data.append([temp, el["componentCode"], el["erpComponentName"],
+        table_data.append([temp, el["componentSpecificationEn"], el["componentCode"], el["erpComponentName"],
                            el["componentPrices"][0]["productPrice"], el["componentLibraryType"]])
         temp += 1
     print(table.table)
@@ -45,7 +45,7 @@ def SearchLCSC(component):
         # componentPrices
         BR()
         selected = SelectLCSC(lcsc)
-        #clear()
+        # clear()
         return lcsc[selected]["componentCode"]
 
     if type.startswith('C'):
