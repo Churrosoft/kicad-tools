@@ -5,7 +5,7 @@ import requests
 def buscar_componente(keyword, package='', lib='base'):
     data = {
         'currentPage': 1,
-        'pageSize': 5,  # ñejeje y asi es como nos cae la PFA china
+        'pageSize': 10,  # ñejeje y asi es como nos cae la PFA china
         'keyword': keyword,
         'secondeSortName': '',
         'componentSpecification': package,
