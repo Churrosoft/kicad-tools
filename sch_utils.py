@@ -7,7 +7,7 @@ def findComponentsLines(_file):
     for i, line in enumerate(myFile):
         for match in re.finditer(pattern, line):
             comp.append(i+1)
-            print('Found Component on line %s' % (i+1))
+            #print('Found Component on line %s' % (i+1))
     return comp
 
 
