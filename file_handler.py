@@ -1,4 +1,4 @@
-filename = "./pcb_test/mod1.sch"
+filename = "./connector.sch" #esta porqueria tendria que venir por la linea de comandos, pero bueno
  
 def getFile():
     return open(filename, "r+")

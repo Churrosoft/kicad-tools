@@ -17,7 +17,7 @@ for i, el in enumerate(comp):
     _comp = getComponent(getFile(), el)
     LCSC = GetLCSC(_comp)
     if LCSC:
-        #print(f"Found component on line {el} with LCSC code, skipping")
+        print(f"Found component on line {el} ,component: {_comp} with LCSC code, skipping")
         skipped += 1
     else:
         _searchComp = SearchLCSC(_comp)
@@ -28,10 +28,11 @@ for i, el in enumerate(comp):
             _dat = getFile().readlines()
             _dat = appendInfoToFile(
                 _dat, line, f'F 4 "{_searchComp}" H 4950 3850 50  0001 C CNN "LCSC"\n')
+            #save(_dat, filename)
         else:
             noVal += 1
         acc += 1
-        #save(_dat, filename)
+        
 
 print(f"Skipped: {skipped} components")
 print(f"no se pueden encontrar: {noVal}")

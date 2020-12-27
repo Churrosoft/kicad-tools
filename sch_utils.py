@@ -31,6 +31,7 @@ def GetLCSC(_comp):
         row = extracValues(el)
         if(len(row) > 1):
             if(row[1] == "LCSC"):
+                print(row)
                 return row[1]
     return 0
 

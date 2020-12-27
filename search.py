@@ -36,11 +36,15 @@ def SearchLCSC(component):
         res = res.groups()
 
         if len(res) > 3:
-            component_data = [['Reference', 'Package', 'Value',
-                               'Pot(W)', 'Tol(%)'], [str(type), package, str(res[0]), str(res[1]), str(res[2])]]
+            component_data = [
+                ['Reference', 'Package', 'Value', 'Pot(W)', 'Tol(%)'],
+                [str(type), package, str(res[0]), str(res[1]), str(res[2])]
+            ]
         else:
             component_data = [
-                ['Reference', 'Package', 'Value', 'Pot(W)'], [type, package, res[0], res[1]]]
+                ['Reference', 'Package', 'Value', 'Pot(W)'],
+                [type, package, res[0], res[1]]
+            ]
         table = AsciiTable(component_data, "Search for resistor")
         print(table.table)
 
@@ -50,10 +54,9 @@ def SearchLCSC(component):
             # clear()
             return lcsc[selected]["componentCode"]
         else:
-            print(lcsc)
             print("not find piece for: " + type)
             return "null"
 
-    if type.startswith('C'):
-        print("e un cap")
+    #if type.startswith('C'):
+        #print("e un cap")
     return "null"
