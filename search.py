@@ -1,14 +1,8 @@
 import re
-from sch_utils import extracValues
+from sch_utils import extracValues, GetPackage
 from scraper import buscar_componente
 from terminaltables import AsciiTable
-from term_utils import get_int, clear
-from package import get_package
-
-
-def BR():
-    print("--------------------------------------------------")
-
+from term_utils import get_int, clear, BR
 
 def SelectLCSC(lcsc_list):
     temp = 0
@@ -23,9 +17,9 @@ def SelectLCSC(lcsc_list):
 
 
 def SearchLCSC(component):
+    #TODO: esta tengo que separar toda esta porqueria por componente:
     type = extracValues(component[0])[0]
-    package = get_package(component[2][1])
-
+    package = GetPackage(component)
     if type.startswith('R'):
         BR()
         res = re.search(

@@ -2,7 +2,7 @@ import re
 from sch_utils import findComponentsLines, getComponent, extracValues, GetLCSC
 from file_handler import getFile, appendInfoToFile, save, filename
 from search import SearchLCSC
-
+from term_utils import clear
 comp = findComponentsLines(getFile())
 acc = 0
 """ _dat = getFile().readlines()
@@ -32,6 +32,7 @@ for i, el in enumerate(comp):
         else:
             noVal += 1
         acc += 1
+    clear()
         
 
 print(f"Skipped: {skipped} components")
