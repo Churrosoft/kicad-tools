@@ -1,6 +1,6 @@
 "Id";"Identificador";"Paquete";"Cantidad";"Identificación";"Suministrador y ref";
-1;"R122,R121";"R_0603_1608Metric";2;"R_Small";;;
-2;"D29,D22,D27,D26,D17,D14,D18,D20,D28,D16,D30,D19,D24,D21,D15,D23,D25";"D_SOD-323";17;"K26";;;
+1;"R122,R121";"R_0603_1608Metric";2;"10k";;;
+2;"D29,D22,D27,D26,D17,D14,D18,D20,D28,D16,D30,D19,D24,D21,D15,D23,D25";"D_SOD-323";17;"B5819WS";;;
 3;"D2,D3";"D_SOD-523";2;"1N4148";;;
 4;"C21,C18,C20,C22,C19";"C_0603_1608Metric";5;"10pF";;;
 5;"R34,R31,R32";"R_0603_1608Metric";3;"1k";;;

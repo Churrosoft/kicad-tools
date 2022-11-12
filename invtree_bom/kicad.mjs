@@ -1,5 +1,6 @@
-const CSRF_TOKEN = '';
-const SESSIONID = '';
+const CSRF_TOKEN =
+  'grzGKVeg3Mo6SjpAk1atuilEMgWMxJH80l9u1IVvmf2DxOQ44bKNo8f1msIer9uG';
+const SESSIONID = 'kt5uba5i5shurcrdpfcnubaixw0etbvc';
 
 export const INVTREE_API_URL =
   '/api/part/?search={{search}}&offset=0&limit=25&cascade=1&category={{category}}&category_detail=true';
@@ -17,8 +18,11 @@ const KiCADFootprintMappings = {
   Fuse_0805_2012Metric: '0805',
   'TO-220': 'TO-220',
   'TO-263': 'TO-263',
+  'MSOP-12': 'MSOP-12',
+  'LQFP-100': 'LQFP-100',
+  'SOP65P1030X245':'32-SOIC',
   //Why maxin, why:
-  'SOP63P602X175-16N': 'SOP63P602X175-16N',
+  'SOP63P602X175-16N': '16-QSOP',
 };
 
 const KiCADComponentMappings = {
