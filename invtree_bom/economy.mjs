@@ -21,9 +21,8 @@ export const getDolarRate = async () => {
   return pricing_cache;
 };
 
-export const getShippingRates = async ({ weight, products_total }) => {
+export const getLCSCShippingRates = async ({ weight, products_total }) => {
   // a todo esto faltaria los costos de importacion:
-  console.log();
 
   const shippingResult = await fetch(
     shippingRateAPI
@@ -31,6 +30,16 @@ export const getShippingRates = async ({ weight, products_total }) => {
       .replace('{{products_total}}', products_total)
   );
 
-  console.log(await shippingResult.json());
-  return shippingResult;
+  const { data } = await shippingResult.json();
+
+  return data.expresses_data;
 };
+
+export const getDigiKeyShippingRates = async ({ weight, products_total }) => {
+  return 0;
+};
+
+
+export const calculateAduanaFees = async({bom_items, shipping_info})=>{
+  return 0;
+}
