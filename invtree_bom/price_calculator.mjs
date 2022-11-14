@@ -1,8 +1,8 @@
 #!/bin/node
 
-import { getShippingRates } from './economy.mjs';
+import { getLCSCShippingRates } from './utils/economy.mjs';
 
-getShippingRates({ weight: 345, products_total: 600.2 });
+getLCSCShippingRates({ weight: 345, products_total: 600.2 });
 
 /**
  * sacar supplier info:

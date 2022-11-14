@@ -129,24 +129,4 @@ export function httpRequest(t, n) {
   });
 }
 
-/* export const rl = ReadLine.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
- */
 export const Question = (rl) => util.promisify(rl.question).bind(rl);
-
-/*  const userInput = (Question) =>
-  new Promise((resolve, reject) => {
-    rl.question(Question, function (Answer) {
-      rl.close();
-      resolve(Answer);
-    });
-  }); */
-
-/* (async () => {
-  console.log(await Select(['mango', 'banana', 'apple', 'orange']));
-  console.log(await Select(['mango 2', 'banana 3', 'apple', 'orange']));
-  exit();
-})();
- */

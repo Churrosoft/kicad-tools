@@ -13,8 +13,8 @@ import {
   getComponentName,
   makeParams,
   getInvtreeCategory,
-} from './kicad.mjs';
-import { httpRequest, Select, Question /*  ,rl */ } from './select.mjs';
+} from './utils/kicad.mjs';
+import { httpRequest, Select, Question } from './utils/select.mjs';
 import fs from 'node:fs';
 import ReadLine from 'node:readline';
 
@@ -53,7 +53,7 @@ outputBom.write('part_ipn,quantity,optional,consumable,reference,note\n');
       name: componentName,
       value: splitedLine[4],
       category: getInvtreeCategory(componentName),
-      references: splitedLine[1].split(',').join(';')
+      references: splitedLine[1].split(',').join(';'),
     };
     let outputString = '';
     const searchResult = await httpRequest(makeParams(component));
