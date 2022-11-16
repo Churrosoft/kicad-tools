@@ -1,105 +1,56 @@
 #!/bin/node
+import {
+  getPartInfoFromIPN,
+  getPartManufacterInfo,
+} from './utils/inventree.mjs';
 
-import { getLCSCShippingRates } from './utils/economy.mjs';
+import {
+  getDigiKeyPriceBreaks,
+  getLCSCPriceBreaks,
+  getTotalPriceForPart,
+} from './utils/economy.mjs';
 
-getLCSCShippingRates({ weight: 345, products_total: 600.2 });
+const results = [];
 
-/**
- * sacar supplier info:
- * buscar parte por IPN => conseguir ID
- * api/company/part/{ID}/
- *
- */
+const calculatePriceFromBom = async () => {
+  const mockComponents = [
+    { IPN: 'CAP-000216-00', qnt: 45 },
+    { IPN: 'CON-000011-00', qnt: 1 },
+  ];
 
-const supplierMock = {
-  available: '0.000',
-  availability_updated: null,
-  description: 'CONN HEADER BRD EDGE 48POS',
-  link: 'https://www.digikey.com/en/products/detail/molex/0366380002/2421509',
-  manufacturer_detail: {
-    pk: 9,
-    url: '/company/9/',
-    name: 'Molex',
-    description: 'Molex',
-    image: '/static/img/blank_image.thumbnail.png',
-  },
-  manufacturer_part: 11,
-  manufacturer_part_detail: {
-    pk: 11,
-    part: 11,
-    part_detail: {
-      pk: 11,
-      IPN: 'CON-000011-00',
-      default_location: null,
-      name: '0366380002',
-      revision: 'A',
-      full_name: 'CON-000011-00 | 0366380002 | A',
-      description: 'CONN HEADER BRD EDGE 48POS',
-      thumbnail: '/media/part_images/11_thumbnail.thumbnail.jpeg',
-      active: true,
-      assembly: false,
-      is_template: false,
-      purchaseable: true,
-      salable: false,
-      trackable: false,
-      virtual: false,
-      units: '',
-    },
-    manufacturer: 9,
-    manufacturer_detail: {
-      pk: 9,
-      url: '/company/9/',
-      name: 'Molex',
-      description: 'Molex',
-      image: '/static/img/blank_image.thumbnail.png',
-    },
-    description: 'CONN HEADER BRD EDGE 48POS',
-    MPN: '0366380002',
-    link: 'https://www.molex.com/pdm_docs/sd/366380002_sd.pdf',
-  },
-  note: null,
-  pk: 11,
-  packaging: null,
-  pack_size: 1.0,
-  part: 11,
-  part_detail: {
-    pk: 11,
-    IPN: 'CON-000011-00',
-    default_location: null,
-    name: '0366380002',
-    revision: 'A',
-    full_name: 'CON-000011-00 | 0366380002 | A',
-    description: 'CONN HEADER BRD EDGE 48POS',
-    thumbnail: '/media/part_images/11_thumbnail.thumbnail.jpeg',
-    active: true,
-    assembly: false,
-    is_template: false,
-    purchaseable: true,
-    salable: false,
-    trackable: false,
-    virtual: false,
-    units: '',
-  },
-  SKU: 'WM4438-ND',
-  supplier: 1,
-  supplier_detail: {
-    pk: 1,
-    url: '/company/1/',
-    name: 'Digi-Key',
-    description: '',
-    image: '/media/company_images/company_1_img.thumbnail.jpg',
-  },
-  url: '/supplier-part/11/',
+  for (let index = 0; index < mockComponents.length; index++) {
+    const { IPN, qnt: IPNQuantity } = mockComponents[index];
+    const partData = await getPartInfoFromIPN(IPN);
+    const manufacturerData = await getPartManufacterInfo(partData.pk);
+
+    let priceBreaks;
+
+    if (manufacturerData.supplier === 1) {
+      const digikeyURL = manufacturerData.link;
+      const digikeyPartNumber = manufacturerData.link.split('/').pop();
+
+      priceBreaks = await getDigiKeyPriceBreaks({
+        bom_item: digikeyPartNumber,
+        bom_url: digikeyURL,
+      });
+    } else {
+      priceBreaks = await getLCSCPriceBreaks({
+        bom_item: manufacturerData.SKU,
+      });
+    }
+
+    const partPricing = await getTotalPriceForPart({
+      bom_item: partData,
+      quantity: IPNQuantity,
+      price_breaks: priceBreaks,
+    });
+    console.log('----------------------------------');
+    console.log(partPricing);
+    results.push({ ...partPricing, supplierStock: priceBreaks.stock , supplier: manufacturerData.supplier_detail.name});
+    console.log('----------------------------------');
+  }
+
+  console.table(results, ['IPN', 'unitPrice', 'supplierStock', 'totalPrice', 'supplier']);
 };
 
-/* function Person(firstName, lastName) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-  }
-  
-  var john = new Person("John", "Smith");
-  var jane = new Person("Jane", "Doe");
-  var emily = new Person("Emily", "Jones");
-  
-console.table([john, jane, emily], ["firstName"]);
- */
+calculatePriceFromBom();

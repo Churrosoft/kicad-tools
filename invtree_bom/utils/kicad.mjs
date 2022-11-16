@@ -20,7 +20,7 @@ const KiCADFootprintMappings = {
   'TO-263': 'TO-263',
   'MSOP-12': 'MSOP-12',
   'LQFP-100': 'LQFP-100',
-  'SOP65P1030X245':'32-SOIC',
+  SOP65P1030X245: '32-SOIC',
   //Why maxin, why:
   'SOP63P602X175-16N': '16-QSOP',
 };
