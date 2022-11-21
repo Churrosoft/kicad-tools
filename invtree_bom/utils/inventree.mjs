@@ -22,3 +22,51 @@ export const getPartManufacterInfo = async (PK) => {
     return response.data.pop();
   }
 };
+
+export const updatePriceBreaks = async ({ IPN, price_breaks }) => {
+  const formatedPriceBreaks = price_breaks.map((price) => ({
+    part: IPN,
+    quantity: price.breakQty,
+    price: price.unitPrice,
+    price_currency: 'USD',
+  }));
+
+  // search for older price breaks:
+  // /api/company/price-break/.*?part=221
+  const searchResult = await axios(
+    getInvenTreeConfig(
+      'http://stock.lan/api/company/price-break/.*?part={{IPN}}'.replace(
+        '{{IPN}}',
+        IPN
+      )
+    )
+  ).catch((e) => console.log(e));
+
+  if (searchResult?.data?.length) {
+    for (let index = 0; index < searchResult?.data.length; index++) {
+      const priceBreak = searchResult?.data[index];
+      await axios(
+        getInvenTreeConfig(
+          'http://stock.lan/api/company/price-break/' + priceBreak.pk,
+          'delete'
+        )
+      ).catch((e) => console.log(e));
+    }
+  }
+
+  for (let index = 0; index < formatedPriceBreaks.length; index++) {
+    const priceBreak = formatedPriceBreaks[index];
+    const response = await axios(
+      getInvenTreeConfig(
+        'http://stock.lan/api/company/price-break/.*',
+        'post',
+        priceBreak
+      )
+    ).catch((e) => console.log(e));
+    /*   console.log(response.data); */
+  }
+};
+
+export const parseBoomOutput = (filename) => {
+  // TODO: garrar la pala
+};

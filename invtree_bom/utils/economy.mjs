@@ -25,6 +25,14 @@ export const getDolarRate = async () => {
 };
 
 export const calculateAduanaFees = async ({ bom_items, shipping_info }) => {
+
+  // por ahora 1.5x a todo, luego cuando consiga una factura de DHL hago todo por item
+
+  return bom_items.reduce((prev,current) =>{
+
+  });
+
+
   return 0;
 };
 
@@ -103,21 +111,23 @@ export const getTotalPriceForPart = async ({
   quantity,
   price_breaks,
 }) => {
-  for (let price_index = 0; price_index < price_breaks.pricing.length; price_index++) {
+  for (
+    let price_index = 0;
+    price_index < price_breaks.pricing.length;
+    price_index++
+  ) {
     const price = price_breaks.pricing[price_index];
     if (price.breakQty > quantity) {
       return {
         ...bom_item,
-        unitPrice: price.unitPrice,
-        totalPrice: price.unitPrice * quantity,
+        unitPrice: price.unitPrice.toFixed(3),
+        totalPrice: (price.unitPrice * quantity).toFixed(3),
       };
     }
   }
   return {
     ...bom_item,
-    unitPrice: price_breaks.pricing[0].unitPrice,
-    totalPrice: price_breaks.pricing[0].unitPrice * quantity,
+    unitPrice: price_breaks.pricing[0].unitPrice.toFixed(3),
+    totalPrice: (price_breaks.pricing[0].unitPrice * quantity).toFixed(3),
   };
 };
-
-

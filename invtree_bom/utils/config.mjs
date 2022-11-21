@@ -73,7 +73,6 @@ export const DigiKeyConfig = (productID, referrer, cookie) => ({
     cookie,
     pragma: 'no-cache',
     referer: referrer,
-    /* 'request-id': '|d2c48de908d24686811aa10585b9b9d4.ea2f56893db84714', */
     'sec-ch-ua':
       '"Chromium";v="104", " Not A;Brand";v="99", "Google Chrome";v="104"',
     'sec-ch-ua-mobile': '?0',
@@ -84,7 +83,6 @@ export const DigiKeyConfig = (productID, referrer, cookie) => ({
     'user-agent':
       'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
     'x-currency': 'USD',
-    /*     'x-request-id': '4e7c910e-06c1-417a-b4aa-ca7ef1bf9442', */
   },
   httpsAgent: new https.Agent({
     secureProtocol: 'TLSv1_2_method',
@@ -95,9 +93,11 @@ export const DigiKeyConfig = (productID, referrer, cookie) => ({
 const CSRF_TOKEN =
   'grzGKVeg3Mo6SjpAk1atuilEMgWMxJH80l9u1IVvmf2DxOQ44bKNo8f1msIer9uG';
 const SESSIONID = 'kt5uba5i5shurcrdpfcnubaixw0etbvc';
-export const getInvenTreeConfig = (url) => ({
-  method: 'get',
+
+export const getInvenTreeConfig = (url, method = 'get',data) => ({
+  method,
   url,
+  data,
   headers: {
     Cookie: `csrftoken=${CSRF_TOKEN}; sessionid=${SESSIONID}`,
     'X-CSRFToken': CSRF_TOKEN,

@@ -1,7 +1,12 @@
 #!/bin/node
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import {
   getPartInfoFromIPN,
   getPartManufacterInfo,
+  updatePriceBreaks,
 } from './utils/inventree.mjs';
 
 import {
@@ -25,6 +30,9 @@ const calculatePriceFromBom = async () => {
 
     let priceBreaks;
 
+    manufacturerData.pk; // ID para agregar pricebreaks;
+    manufacturerData.supplier; // ID de supplier (lcsc/digi/etc)
+
     if (manufacturerData.supplier === 1) {
       const digikeyURL = manufacturerData.link;
       const digikeyPartNumber = manufacturerData.link.split('/').pop();
@@ -44,13 +52,26 @@ const calculatePriceFromBom = async () => {
       quantity: IPNQuantity,
       price_breaks: priceBreaks,
     });
-    console.log('----------------------------------');
-    console.log(partPricing);
-    results.push({ ...partPricing, supplierStock: priceBreaks.stock , supplier: manufacturerData.supplier_detail.name});
-    console.log('----------------------------------');
+
+    results.push({
+      ...partPricing,
+      supplierStock: priceBreaks.stock,
+      supplier: manufacturerData.supplier_detail.name,
+    });
+    await updatePriceBreaks({
+      IPN: manufacturerData.pk,
+      price_breaks: priceBreaks.pricing,
+    });
+    return;
   }
 
-  console.table(results, ['IPN', 'unitPrice', 'supplierStock', 'totalPrice', 'supplier']);
+  console.table(results, [
+    'IPN',
+    'unitPrice',
+    'supplierStock',
+    'totalPrice',
+    'supplier',
+  ]);
 };
 
 calculatePriceFromBom();
