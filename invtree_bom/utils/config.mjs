@@ -26,9 +26,9 @@ export const LCSCComponentSearch = (productID) => ({
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-site',
   },
-  httpsAgent: new https.Agent({
+/*   httpsAgent: new https.Agent({
     secureProtocol: 'TLSv1_2_method',
-  }),
+  }), */
 });
 
 // DIGIKEY

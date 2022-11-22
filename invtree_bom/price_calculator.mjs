@@ -1,4 +1,6 @@
 #!/bin/node
+import { exit } from 'node:process';
+import fs from 'node:fs';
 
 import * as dotenv from 'dotenv';
 dotenv.config();
@@ -17,14 +19,28 @@ import {
 
 const results = [];
 
-const calculatePriceFromBom = async () => {
-  const mockComponents = [
-    { IPN: 'CAP-000216-00', qnt: 45 },
-    { IPN: 'CON-000011-00', qnt: 1 },
-  ];
+if (!process.argv.slice(2)[0]) {
+  console.log('falta el csv con el bom de inventree pelotudo');
+  exit(1);
+}
 
-  for (let index = 0; index < mockComponents.length; index++) {
-    const { IPN, qnt: IPNQuantity } = mockComponents[index];
+const bomFile = fs
+  .readFileSync(process.argv.slice(2)[0] /* './uEFI_rev3.csv' */, 'utf8')
+  .split('\n');
+
+const calculatePriceFromBom = async () => {
+
+  for (let index = 1; index < bomFile.length; index++) {
+    const bomLine = bomFile[index];
+    if (!bomLine.length) {
+      continue;
+    }
+
+    const [IPN, IPNQuantity] = bomLine
+      .split(',')
+      .map((e) => e.split('"').join(''));
+    console.log(IPN, ' ; ', IPNQuantity);
+    /*  console.log(bomFile); */
     const partData = await getPartInfoFromIPN(IPN);
     const manufacturerData = await getPartManufacterInfo(partData.pk);
 
@@ -42,6 +58,9 @@ const calculatePriceFromBom = async () => {
         bom_url: digikeyURL,
       });
     } else {
+/*       console.log("----------------------");
+      console.log(manufacturerData.SKU);
+      console.log("----------------------"); */
       priceBreaks = await getLCSCPriceBreaks({
         bom_item: manufacturerData.SKU,
       });
