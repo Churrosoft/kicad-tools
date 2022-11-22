@@ -62,7 +62,6 @@ const calculatePriceFromBom = async () => {
       IPN: manufacturerData.pk,
       price_breaks: priceBreaks.pricing,
     });
-    return;
   }
 
   console.table(results, [

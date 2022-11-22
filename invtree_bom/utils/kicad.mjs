@@ -1,5 +1,7 @@
-export const INVTREE_API_URL =
-  '/api/part/?search={{search}}&offset=0&limit=25&cascade=1&category={{category}}&category_detail=true';
+export const makeInvenTreeSearch = (component) =>
+  '/part/?search={{search}}&offset=0&limit=25&cascade=1&category={{category}}&category_detail=true'
+    .replace('{{search}}', encodeURI(`${component.package} ${component.value}`))
+    .replace('{{category}}', component.category ?? null);
 
 const KiCADFootprintMappings = {
   [/(R|L|C)_0603/]: '0603',
@@ -65,18 +67,3 @@ export const getInvtreeCategory = (componentName) => {
       return null;
   }
 };
-
-export const makeParams = (component) => ({
-  host: 'stock.lan',
-  port: 80,
-  method: 'GET',
-  timeout: 1000,
-  path: INVTREE_API_URL.replace(
-    '{{search}}',
-    encodeURI(`${component.package} ${component.value}`)
-  ).replace('{{category}}', component.category ?? null),
-  headers: {
-    Cookie: `csrftoken=${CSRF_TOKEN}; sessionid=${SESSIONID}`,
-    'X-CSRFToken': CSRF_TOKEN,
-  },
-});

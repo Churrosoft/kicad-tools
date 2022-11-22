@@ -90,16 +90,12 @@ export const DigiKeyConfig = (productID, referrer, cookie) => ({
 });
 
 // INVENTREE
-const CSRF_TOKEN =
-  'grzGKVeg3Mo6SjpAk1atuilEMgWMxJH80l9u1IVvmf2DxOQ44bKNo8f1msIer9uG';
-const SESSIONID = 'kt5uba5i5shurcrdpfcnubaixw0etbvc';
 
-export const getInvenTreeConfig = (url, method = 'get',data) => ({
+export const getInvenTreeConfig = (url, method = 'get', data) => ({
   method,
-  url,
+  url: process.env.API_URL + url,
   data,
   headers: {
-    Cookie: `csrftoken=${CSRF_TOKEN}; sessionid=${SESSIONID}`,
-    'X-CSRFToken': CSRF_TOKEN,
+    Authorization: `Token ${process.env.API_TOKEN}`,
   },
 });

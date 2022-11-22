@@ -8,15 +8,31 @@
  * reference
  * note (con N° parte orishinal de kicad)
  */
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import fs from 'node:fs';
+import ReadLine from 'node:readline';
+import { exit } from 'node:process';
+
+import axios from 'axios';
+
 import {
   getComponentFootprint,
   getComponentName,
-  makeParams,
+  makeInvenTreeSearch,
   getInvtreeCategory,
 } from './utils/kicad.mjs';
-import { httpRequest, Select, Question } from './utils/select.mjs';
-import fs from 'node:fs';
-import ReadLine from 'node:readline';
+
+import { Select, Question } from './utils/select.mjs';
+
+import { getInvenTreeConfig } from './utils/config.mjs';
+
+if(!process.argv.slice(2)[0]){
+  console.log("falta el csv con el bom de kicad pelotudo");
+  exit(1);
+}
 
 const bomFile = fs
   .readFileSync(process.argv.slice(2)[0] /* './uEFI_rev3.csv' */, 'utf8')
@@ -56,8 +72,13 @@ outputBom.write('part_ipn,quantity,optional,consumable,reference,note\n');
       references: splitedLine[1].split(',').join(';'),
     };
     let outputString = '';
-    const searchResult = await httpRequest(makeParams(component));
-    console.clear();
+    const { data: searchResult } = await axios(
+      getInvenTreeConfig(makeInvenTreeSearch(component))
+    );
+
+    console.log(getInvenTreeConfig(makeInvenTreeSearch(component)));
+    console.log(searchResult);
+
     console.log('|---------------------------------------------|');
     console.log(
       '| Search for: ',
@@ -68,7 +89,7 @@ outputBom.write('part_ipn,quantity,optional,consumable,reference,note\n');
       component.value
     );
 
-    if (searchResult?.results.length) {
+    if (searchResult?.results?.length) {
       console.log(
         '|   Stock |-- InvTree Part --- | Description ------------ |'
       );
@@ -78,7 +99,7 @@ outputBom.write('part_ipn,quantity,optional,consumable,reference,note\n');
       const userResponse = await Select(options);
       const selectedComponent = searchResult.results[userResponse.index];
 
-      outputString = `${selectedComponent.IPN},${component.count},false,true,${component.references},${splitedLine[2]};${splitedLine[3]};${splitedLine[4]}`;
+      outputString = `${selectedComponent.IPN},${component.count},False,True,${component.references},${splitedLine[2]};${splitedLine[3]};${splitedLine[4]}`;
     } else {
       const rl = ReadLine.createInterface({
         input: process.stdin,
@@ -87,7 +108,7 @@ outputBom.write('part_ipn,quantity,optional,consumable,reference,note\n');
 
       const user_IPN = await Question(rl)('| no results, enter InvTree IPN:  ');
       rl.close();
-      outputString = `${user_IPN},${component.count},false,true,${component.references},${splitedLine[2]};${splitedLine[3]};${splitedLine[4]}`;
+      outputString = `${user_IPN},${component.count},False,True,${component.references},${splitedLine[2]};${splitedLine[3]};${splitedLine[4]}`;
     }
     outputBom.write(outputString + '\n');
   }
